@@ -7,7 +7,7 @@ import os
 
 # pip install pyAudio
 
-engine = pyttsx3.init("sapi5")
+engine = pyttsx3.init()
 voices = engine.getProperty("voices")
 # print(voices[1].id)
 engine.setProperty("voice", voices[0].id)
@@ -23,7 +23,7 @@ def wishMe():
     if hour >= 0 and hour < 12:
         speak("Good Morning!")
 
-    elif hour >= 12 and hour < 18:
+    elif hour >= 12 and hour < 16:
         speak("Good Afternoon!")
 
     else:
@@ -35,7 +35,6 @@ def wishMe():
 
 def takeCommand():
     # It takes microphone input from the user and returns string output
-
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
@@ -57,7 +56,6 @@ def takeCommand():
 if __name__ == "__main__":
     wishMe()
     while True:
-        # if 1:
         query = takeCommand().lower()
 
         # Logic for executing tasks based on query
