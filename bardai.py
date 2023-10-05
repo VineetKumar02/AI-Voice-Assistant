@@ -2,9 +2,14 @@ import datetime
 import pyttsx3  # pip install pyttsx3
 import speech_recognition as sr  # pip install speechRecognition
 import google.generativeai as palm   # pip install -U google-generativeai
+# pip install pyaudio
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Confugure Palm with API Key
-palm.configure(api_key='Your Api Key Here')
+palm.configure(api_key=os.getenv('PALM_API_KEY'))
 
 # Voice Engine Settings
 engine = pyttsx3.init()
@@ -50,7 +55,7 @@ def takeCommand():
     try:
         print("Recognizing...")
         query = r.recognize_google(audio, language="en-in")
-        print(f"User said: {query}\n")
+        print(f"\nUser: {query}")
 
     except Exception as e:
         # print(e)
@@ -61,7 +66,7 @@ def takeCommand():
 
 
 if __name__ == "__main__":
-    wishMe()
+    # wishMe()
 
     # An array of "ideal" interactions between the user and the model
     examples = [
@@ -78,13 +83,12 @@ if __name__ == "__main__":
         messages='hello jarvis',
         temperature=1)
 
-    print(response.last)
+    print("Jarvis: ", response.last)
     speak(response.last)
-
 
     while True:
         query = takeCommand().lower()
-        print(query)
+        # print(query)
 
         if "shutdown" in query and "jarvis" in query:
             print("System Shutting Down. See you soon sir")
@@ -94,7 +98,7 @@ if __name__ == "__main__":
         elif query != "none":
             # Add to the existing conversation by sending a reply
             response = response.reply(query)
-            print(response.last)
+            print("Jarvis: ", response.last)
             speak(response.last)
 
 

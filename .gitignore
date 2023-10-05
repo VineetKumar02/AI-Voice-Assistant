@@ -1,4 +1,7 @@
+.env
 bing_cookies.json
 images
 try.py
 .vscode
+extras/
+utils/
