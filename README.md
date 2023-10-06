@@ -26,44 +26,62 @@ The **Voice Assistant** project brings the convenience of voice commands to your
 
 To get started with the project, follow these steps:
 
-1. **Clone the Repository:**
+### 1. Get Source Code Files
+#### Option 1: Clone Repository
 
-   If you have Git installed, you can clone the repository using the following command:
-    
+- If you have Git installed, you can clone the repository using the following command:
+
+  ```bash
+  git clone https://github.com/VineetKumar02/Python-Voice-Assistant.git
+  ```
+
+- After cloning, navigate to the project directory:
+
+  ```bash
+  cd Python-Voice-Assistant
+  ```
+
+#### Option 2: Download ZIP
+
+- If you prefer not to use Git, you can download the ZIP archive of the project:
+
+  1. Click the "Code" button on the repository page.
+  2. Choose "Download ZIP."
+  3. Extract the downloaded ZIP file to a location of your choice.
+
+### 2. Install Dependencies
+
+Install the required Python libraries using pip:
+
+1. Using Reqirements.txt file
     ```bash
-    git clone https://github.com/YourGitHubUsername/Voice-Assistant.git
+    pip install -r requirements.txt
     ```
 
-   After cloning, navigate to the project directory:
+    or
 
-   ```bash
-   cd Voice-Assistant
-   ```
+2. For latest version of packages (May not work. If fails.. Follow method 1)
 
-2. **Install Dependencies:**
+    ```bash
+    pip install pyttsx3 speech_recognition google-generativeai python-dotenv pyaudio
+    ```
 
-   Install the required Python libraries using pip:
+### 3. API Configuration
 
-   ```bash
-   pip install pyttsx3 speech_recognition google-generativeai python-dotenv pyaudio
-   ```
+- Create a Google Bard AI account and obtain an API key.
+- Configure your `.env` file with your API key:
 
-3. **API Configuration:**
+  ```
+  PALM_API_KEY=YOUR_API_KEY
+  ```
 
-   - Create a Google Bard AI account and obtain an API key.
-   - Configure your `.env` file with your API key:
+### 4. Run the Assistant
 
-      ```
-      PALM_API_KEY=YOUR_API_KEY
-      ```
+  Execute the python script to start the voice assistant:
 
-4. **Run the Assistant:**
-
-   Execute the `main.py` script to start the voice assistant:
-
-   ```bash
-   python bardai.py
-   ```
+  ```bash
+  python bardai.py
+  ```
 
 ## Usage
 

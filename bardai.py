@@ -1,20 +1,24 @@
 import datetime
-import pyttsx3  # pip install pyttsx3
-import speech_recognition as sr  # pip install speechRecognition
-import google.generativeai as palm   # pip install -U google-generativeai
-# pip install pyaudio
+import time
+import pyttsx3
+import speech_recognition as sr
+import google.generativeai as palm
 
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-# Confugure Palm with API Key
+# Configure Palm with API Key
 palm.configure(api_key=os.getenv('PALM_API_KEY'))
 
 # Voice Engine Settings
 engine = pyttsx3.init()
 voices = engine.getProperty("voices")
 engine.setProperty("voice", voices[0].id)  # 0 - male, 2 - female
+
+
+LINE_UP = '\033[1A'
+LINE_CLEAR = '\x1b[2K'
 
 
 # To make the bot speak
@@ -39,8 +43,16 @@ def wishMe():
     speak("I am Jarvis Sir. Please tell me how may I help you")
 
 
+def printText(user, content):
+    if user == "User":
+        print(LINE_UP, end=LINE_CLEAR)
+
+    print(f"{user}: {content}")
+
+
 # To get voice input and return the query
 def takeCommand():
+
     # It takes microphone input from the user and returns string output
     r = sr.Recognizer()
 
@@ -48,18 +60,27 @@ def takeCommand():
         # wait for a second to let the recognizer adjust the energy threshold based on the surrounding noise level
         r.adjust_for_ambient_noise(source, duration=1)
 
-        print("Listening...")
+        print("\nListening...")
+
         r.pause_threshold = 1
         audio = r.listen(source)
 
     try:
+        print(LINE_UP, end=LINE_CLEAR)
         print("Recognizing...")
+
         query = r.recognize_google(audio, language="en-in")
-        print(f"\nUser: {query}")
+        printText("User", query)
 
     except Exception as e:
         # print(e)
+        print(LINE_UP, end=LINE_CLEAR)
         print("Say that again please...")
+        time.sleep(1)
+
+        print(LINE_UP, end=LINE_CLEAR)
+        print(LINE_UP, end=LINE_CLEAR)
+
         return "None"
 
     return query
@@ -68,22 +89,21 @@ def takeCommand():
 if __name__ == "__main__":
     # wishMe()
 
-    # An array of "ideal" interactions between the user and the model
     examples = [
-        ("Hello Jarvis",  # A hypothetical user input
-         "Hello Sir, How ay I help you today? "  # A hypothetical model response
+        ("Hello Jarvis",
+         "Hello Sir, How may I help you today?"
          ),
         ("I'm kind of bored",
          "It's ok sir. Maybe we could try to learn something new sir!")
     ]
 
     response = palm.chat(
-        context="You are Jarvis, my personal assistant. The one is iron man movies. So speak like him",
+        context="You are Jarvis, my personal assistant. The one is iron man movies. So speak like him.",
         examples=examples,
         messages='hello jarvis',
         temperature=1)
 
-    print("Jarvis: ", response.last)
+    printText("Jarvis", response.last)
     speak(response.last)
 
     while True:
@@ -97,9 +117,18 @@ if __name__ == "__main__":
 
         elif query != "none":
             # Add to the existing conversation by sending a reply
-            response = response.reply(query)
-            print("Jarvis: ", response.last)
-            speak(response.last)
+            if response.last:
+                response = response.reply(query)
+
+                printText("Jarvis", response.last)
+                speak(response.last)
+            else:
+                printText("Jarvis", "No Response")
+                response = palm.chat(
+                    context="You are Jarvis, my personal assistant. The one is iron man movies. So speak like him.",
+                    examples=examples,
+                    messages='hello jarvis',
+                    temperature=1)
 
 
 # Tuning Temperature
